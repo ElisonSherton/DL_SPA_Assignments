@@ -11,5 +11,5 @@ Contributors and maintainers of the repo as follows
 |Name|BITS Id|
 |---|---|
 |[Shreysi Kalra](https://github.com/shreyasi25)|2021fc04586|
-|[Ajith Praveen R]()|2021fc04140|
-|[Vinayak Nayak](https://github.com/ElisonSherton)|2021fc04329|
+|[Ajith Praveen R]()|2021fc04329|
+|[Vinayak Nayak](https://github.com/ElisonSherton)|2021fc04135|
