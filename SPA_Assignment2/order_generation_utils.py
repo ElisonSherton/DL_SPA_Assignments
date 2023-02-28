@@ -1,6 +1,4 @@
-import os, random, json
-from pathlib import Path
-from collections import namedtuple
+import random, json, pickle
 from datetime import datetime, timedelta
 random.seed(42)
 
@@ -46,24 +44,45 @@ class Order:
     def __str__(self):
         return f"BIDDER: {self.bidder:<8}| INSTRUMENT: {self.bid_instrument:<8}| BID TYPE: {self.bid_type:<4}| BID TIME: {self.bid_time.strftime('%H-%M-%S')}| BID PRICE: {str(self.bid_price):>4} INR| STATUS: {self.bid_status:<8} | TRANSACTION_TIME: {self.transaction_time}"
 
+def get_order(time_elapsed):
+    orders = []
+
+    # Select the volume of instrument to bid
+    bid_volume = random.choice(range(1, BID_VOLUME_HIGH + 1))
+    
+    # Sample from the above defined parameters appropriate values 
+    # For different order parameters 
+    bidder = random.choice(ENTITIES)
+    bid_time = START_TIME + timedelta(0, time_elapsed)
+    bid_instrument = random.choice(INSTRUMENTS)
+    l, u = DISTRIBUTION_PARAMETERS[bid_instrument]
+    bid_price = random.choice(range(l, u + 1))
+    bid_type = random.choice(BID_TYPE)
+    status = "ACTIVE"
+
+    # Create a list of orders with the same parameters 
+    # but for as many times as the bid volume
+
+    # Order Creation
+    for _ in range(bid_volume):
+        o = Order(bidder, bid_instrument, bid_price, bid_type,
+                    status, bid_time, DEFAULT_TRANSACTION_TIME)
+        orders.append(o)
+    
+    return orders
+
+# Generate all the orders for the given day all at once
 def order_generation():
     orders = []
     for intervals in range(1081):
-        bid_volume = random.choice(range(1, BID_VOLUME_HIGH + 1))
-        
-        bidder = random.choice(ENTITIES)
-        bid_time = START_TIME + timedelta(0, 20 * intervals)
-        bid_instrument = random.choice(INSTRUMENTS)
-        l, u = DISTRIBUTION_PARAMETERS[bid_instrument]
-        bid_price = random.choice(range(l, u + 1))
-        bid_type = random.choice(BID_TYPE)
-        status = "ACTIVE"
-        for _ in range(bid_volume):
-            o = Order(bidder, bid_instrument, bid_price, bid_type,
-                      status, bid_time, DEFAULT_TRANSACTION_TIME)
-            orders.append(o)
+        ords = get_order(intervals * 20)
+        orders.extend(ords)
     return orders
 
+# Try out the above code
+# all_orders = []
+# for o in order_generation():
+#     print(o)
+#     all_orders.append(o)
 
-for o in order_generation():
-    print(o)
+# pickle.dump(all_orders, open("order_info.pkl", "wb"))
