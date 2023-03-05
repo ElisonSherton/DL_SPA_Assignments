@@ -1,5 +1,4 @@
-import random, json, pickle
-from datetime import datetime, timedelta
+from utils import *
 random.seed(42)
 
 # Read the instruments from the marketplace exchange
@@ -21,6 +20,9 @@ BID_TYPE = ['Buy', 'Sell']
 # Define the start time of the trading cycle/day
 START_TIME = datetime(2023, 2, 28, 9, 30, 0)
 
+# Define the end time of the trading cycle/day
+END_TIME = datetime(2023, 2, 28, 15, 30, 0)
+
 # Limit the volume associated with a particular order
 # This is primarily to avoid complication and make understanding easier
 BID_VOLUME_HIGH = 5
@@ -29,20 +31,10 @@ BID_VOLUME_HIGH = 5
 # define the transaction time to be None
 DEFAULT_TRANSACTION_TIME = None
 
-class Order:
-    def __init__(self, bidder, bid_instrument, bid_price, bid_type,
-                 status, bid_time, transaction_time = None):
-        super().__init__()
-        self.bidder = bidder
-        self.bid_instrument = bid_instrument
-        self.bid_price = bid_price
-        self.bid_type = bid_type
-        self.bid_time = bid_time
-        self.bid_status = status
-        self.transaction_time = transaction_time
-    
-    def __str__(self):
-        return f"BIDDER: {self.bidder:<8}| INSTRUMENT: {self.bid_instrument:<8}| BID TYPE: {self.bid_type:<4}| BID TIME: {self.bid_time.strftime('%H-%M-%S')}| BID PRICE: {str(self.bid_price):>4} INR| STATUS: {self.bid_status:<8} | TRANSACTION_TIME: {self.transaction_time}"
+# Define the frequency of order generation
+# 1 order every 5 second -> 12 orders per minute -> 12 * 60 orders per hour -> 12 * 60 * 6 hours per working day -> 4320 orders
+N_ORDERS = 12 * 60 * 6
+INTERVAL_SECONDS = 5
 
 def get_order(time_elapsed):
     orders = []
@@ -74,15 +66,15 @@ def get_order(time_elapsed):
 # Generate all the orders for the given day all at once
 def order_generation():
     orders = []
-    for intervals in range(1081):
-        ords = get_order(intervals * 20)
+    for intervals in range(N_ORDERS):
+        ords = get_order(intervals * INTERVAL_SECONDS)
         orders.extend(ords)
     return orders
 
 # Try out the above code
-# all_orders = []
-# for o in order_generation():
-#     print(o)
-#     all_orders.append(o)
+all_orders = []
+for idx, o in enumerate(order_generation()):
+    print(f"{idx:0>3d} {o}")
+    all_orders.append(o)
 
-# pickle.dump(all_orders, open("order_info.pkl", "wb"))
+pickle.dump(all_orders, open("results/today_order_info.pkl", "wb"))
