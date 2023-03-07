@@ -13,8 +13,10 @@ TRADE_DB_PATH = "results/today_day_trades.pkl"
 # Read the order information
 order_data = pickle.load(open(ORDER_INFO, "rb"))
 
-# Obtain all the instruments and bidders who have placed orders
-instruments = set([x.bid_instrument for x in order_data])
+# Get the instruments traded in the exchange
+instruments = json.load(open(INSTRUMENTS_DATA, "r"))
+
+# Get all the bidders information who have placed orders
 entities = set([x.bidder for x in order_data])
 
 # Logic to perform order matching

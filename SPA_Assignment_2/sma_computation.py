@@ -17,7 +17,7 @@ SMA_PATH = "results/today_sma_information.pkl"
 trade_data = pickle.load(open(TRADE_DB_PATH, "rb"))
 
 # Obtain all the instruments and bidders who have placed orders
-instruments = set([x[0].bid_instrument for x in trade_data])
+instruments = json.load(open(INSTRUMENTS_DATA, "r"))
 
 # Define the start and end times i.e. bounds within which to compute the SMA
 START_TIME = datetime(2023, 2, 28, 9, 30)
@@ -107,8 +107,13 @@ def plot_sma_computation(sma_map, instrument):
 # Loop over all the instruments and plot their respective SMAs
 sma_info = {}
 for instrument in instruments:
+    # Compute the simple moving average
     sma_map =  sma_computation(instrument, trade_data)
+    
+    # Plot the same against time
     plot_sma_computation(sma_map, instrument)
+    
+    # Keep the information in a map
     sma_info[instrument] = sma_map
     
 # Store the trades that took place in a database (here a pickle file)
