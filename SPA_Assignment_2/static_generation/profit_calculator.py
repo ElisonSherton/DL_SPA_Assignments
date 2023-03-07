@@ -3,9 +3,9 @@ from datetime import datetime
 from utils import *
 
 # Path to databases of trades
-OLD_TRADES = "results/previous_day_trades.pkl"
-CURRENT_DAY_TRADES = "results/today_day_trades.pkl"
-INSTRUMENTS_DATA = "data/marketplace_instruments.json"
+OLD_TRADES = "../results/previous_day_trades.pkl"
+CURRENT_DAY_TRADES = "../results/today_day_trades.pkl"
+INSTRUMENTS_DATA = "../data/marketplace_instruments.json"
 
 def close_price_computation(trades, instrument):
     # Set the start and end times for computation of the profit value

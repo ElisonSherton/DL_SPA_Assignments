@@ -1,9 +1,15 @@
 from utils import *
+import time, logging
+from pathlib import Path
 random.seed(42)
+
+# Set the level to INFO
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Read the instruments from the marketplace exchange
 # Currently simulating this part from a text file
-INSTRUMENTS = json.load(open("data/marketplace_instruments.json", "r"))
+INSTRUMENTS = json.load(open("../data/marketplace_instruments.json", "r"))
 
 # Assume there are three traders currently who're eager to make trades
 ENTITIES = ['Vinayak', 'Praveen', 'Shreysi']
@@ -36,6 +42,12 @@ DEFAULT_TRANSACTION_TIME = None
 N_ORDERS = 12 * 60 * 6
 INTERVAL_SECONDS = 5
 
+# Define the time for which we need to sleep to simulate continuous order generation
+SLEEP_TIME = 5 # 5 seconds
+
+# Path to the persistent store where order information gets logged
+ORDER_PATH = "../results_dynamic/today_order_info.pkl"
+
 def get_order(time_elapsed):
     orders = []
 
@@ -63,18 +75,26 @@ def get_order(time_elapsed):
     
     return orders
 
-# Generate all the orders for the given day all at once
-def order_generation():
-    orders = []
+# Generate all the orders for the given day one at a time
+if __name__ == "__main__":
+    if not Path(ORDER_PATH).exists(): orders = []
+    logging.info("Starting Order Generation Module")
     for intervals in range(N_ORDERS):
+        # Read the orders from the previously existing set of orders
+        if Path(ORDER_PATH).exists(): 
+            orders = pickle.load(open(ORDER_PATH, "rb"))
+        
+        # Generate an order
         ords = get_order(intervals * INTERVAL_SECONDS)
         orders.extend(ords)
-    return orders
-
-# Try out the above code
-all_orders = []
-for idx, o in enumerate(order_generation()):
-    print(f"{idx:0>3d} {o}")
-    all_orders.append(o)
-
-pickle.dump(all_orders, open("results/today_order_info.pkl", "wb"))
+        
+        # Log the orders which have been generated on the console
+        for o in ords:
+            logging.info(str(o))
+        
+        # Add the order to the set of orders
+        logging.info(f"Committing the orders generated to persistent storage")
+        pickle.dump(orders, open(ORDER_PATH, "wb"))
+        
+        # Sleep for some time
+        time.sleep(SLEEP_TIME)

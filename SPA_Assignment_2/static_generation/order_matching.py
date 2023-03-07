@@ -7,13 +7,14 @@ from collections import Counter
 from tqdm import tqdm
 
 # Define paths to the order info database and where to store the trades happening for the given orders
-ORDER_INFO = "results/today_order_info.pkl"
-TRADE_DB_PATH = "results/today_day_trades.pkl"
+ORDER_INFO = "../results/today_order_info.pkl"
+TRADE_DB_PATH = "../results/today_day_trades.pkl"
 
 # Read the order information
 order_data = pickle.load(open(ORDER_INFO, "rb"))
 
 # Get the instruments traded in the exchange
+INSTRUMENTS_DATA = "../data/marketplace_instruments.json"
 instruments = json.load(open(INSTRUMENTS_DATA, "r"))
 
 # Get all the bidders information who have placed orders

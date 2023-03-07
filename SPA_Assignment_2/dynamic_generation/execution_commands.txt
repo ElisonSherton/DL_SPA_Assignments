@@ -1,0 +1,2 @@
+nohup python order_generation.py &> ../logs/generation.log &
+nohup python order_matching.py &> ../logs/matching.log &

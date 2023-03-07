@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 plt.style.use("ggplot")
 
 # Define the path to trades in the database and specify the path where to store the SMA
-TRADE_DB_PATH = "results/today_day_trades.pkl"
-SMA_PATH = "results/today_sma_information.pkl"
+TRADE_DB_PATH = "../results/today_day_trades.pkl"
+SMA_PATH = "../results/today_sma_information.pkl"
 
 # Read the order information
 trade_data = pickle.load(open(TRADE_DB_PATH, "rb"))
@@ -85,7 +85,7 @@ def plot_sma_computation(sma_map, instrument):
         plt.ylabel("Trade Price in INR")
         plt.xlabel("Timestamp")
         plt.text(0, absolute_mean + 0.5, f"Absolute Mean: {absolute_mean:.2f}", fontsize = 10)
-        plt.savefig(f"images/image_{idx}.png")
+        plt.savefig(f"../images/image_{idx}.png")
         plt.close()
 
     # Create a gif out of the images created above
@@ -95,7 +95,7 @@ def plot_sma_computation(sma_map, instrument):
     for i in image_paths:
         images.append(Image.open(i))
 
-    images[0].save(f'images/SMA_{instrument}.gif',
+    images[0].save(f'../images/SMA_{instrument}.gif',
                    save_all = True,
                    append_images = images[1:],
                    duration = GIF_SCREEN_DURATION,
