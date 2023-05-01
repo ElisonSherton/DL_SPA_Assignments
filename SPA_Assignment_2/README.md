@@ -12,3 +12,10 @@ The folder structure is as follows
 - **static_generation**: Similar to dynamic generation but since we can't wait for long periods of time for the sake of the demo, we are generating trades for two days in advance and computing the SMA/Profit calculation using the scripts `sma_computation.py` and `profit_calculator.py` respectively. These could also be implemented in real world using on-prem servers/FaaS services and subsequently their results could be persisted. The profit calculator would be run in a batch mode since needs the closing price of instruments and the SMA Computation could be done in stream mode.
 - **playground.ipynb**: As a scratchpad of sorts to check the working of different components.
 - **SPA-Assignment-2-2.pdf**: Problem Statement of the assignment.
+
+Following resources contain a video and a document explaining the entire process step by step. Hope you find this useful.
+
+|Contents|Link|
+|--|--|
+|Explanation Video|[spa_explanation_video_group_57.mp4](https://drive.google.com/file/d/1qwRtjtcnMP4seuS2cpRIvf2eFqSzP42f/view?usp=sharing)|
+|Document describing submission|[SPA_Assignment_2.doc](https://docs.google.com/document/d/1_07-x-PGR6gvFvsXvHAJiYOBP_VA_6bds1B3BdQFl4c/edit?usp=sharing)|
